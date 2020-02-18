@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 22:46:52 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/18 17:07:41 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/18 21:19:57 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ typedef struct stat		t_stat;
 typedef struct sockaddr	t_addr;
 
 /* Networking struct */
-typedef struct			s_connection
+typedef struct			s_net
 {
 	struct sockaddr_in	addr;
 	int					sock;

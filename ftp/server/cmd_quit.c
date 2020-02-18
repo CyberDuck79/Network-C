@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 11:36:05 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/18 16:08:45 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/18 20:55:36 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int		cmd_quit(t_net *client, char data[BUFF_SIZE], t_log *log)
 	time_t	log_time = time(NULL);
 
 	(void)data;
-	printf("FTP server quitting..\n");
+	printf("FTP server exit...\n");
 	if (send(client->sock, &ret, sizeof(int), 0) == ERROR)
 		log_error(&log_time, log, "quit cmd return", SEND);
 	if (shutdown(client->sock, SHUT_RDWR) == ERROR)

@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 14:32:57 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/18 16:49:10 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/18 21:29:41 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	write_log(t_log *log)
 {
 	int	log_fd;
 
-	log_fd = open("error.log", O_CREAT | O_EXCL | O_WRONLY, 0666);
+	log_fd = open("error.log", O_CREAT | O_WRONLY, 0644);
 	if (log_fd != ERROR)
 	{
 		lseek(log_fd, 0, SEEK_END);
@@ -34,4 +34,5 @@ void	write_log(t_log *log)
 	}
 	else
 		write(2, "error: impossible to open log file\n", 35);
+	close(log_fd);
 }
