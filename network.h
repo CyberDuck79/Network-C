@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:42:40 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/18 14:42:01 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/18 17:03:17 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ typedef enum	e_direction
 	READ_WRITE
 }				t_direction;
 
-typedef struct	s_connection
+typedef struct	s_net
 {
 	t_socket	socket;
 	int			network;

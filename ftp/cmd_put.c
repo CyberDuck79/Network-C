@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 11:04:49 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/18 16:09:16 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/18 16:52:16 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,8 @@ int		cmd_put(t_net *client, char data[BUFF_SIZE], t_log *log)
 		if (file.fd == ERROR)
 			log_error(&log_time, log, file.name, READ);
 		else
-		{
 			while ((file.size = recv(client->sock, buffer, FILE_BUFF, 0)) > 0)
 				writed += write(file.fd, buffer, file.size);
-		}
 	}
 	if (file.size == ERROR)
 		log_error(&log_time, log, file.name, RECV);

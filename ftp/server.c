@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 22:47:38 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/18 16:29:36 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/18 17:10:32 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 static int		server_ini(t_net *server, int port)
 {
+	printf("Server initialization...\n");
 	if ((server->sock = socket(AF_INET, SOCK_STREAM, 0)) == ERROR)
 		return (ERROR);
 	server->len = sizeof(server->addr);
@@ -27,24 +28,27 @@ static int		server_ini(t_net *server, int port)
 
 static int		wait_for_client(t_net *server, t_net *client)
 {
+	printf("Waiting for connection on port %d...\n", server->addr.sin_port);
 	if (listen(server->sock, 1) == ERROR)
 		return (ERROR);
-	// ajouter gestion de plusieurs connections ?
 	client->len = sizeof(client->addr);
 	client->sock = accept(server->sock, (t_addr*)&client->addr, &client->len);
+	client->ip = inet_ntoa(client->addr.sin_addr);
 	return (0);
 }
 
 static void		launch_server(t_net *client)
 {
-	char			data[BUFF_SIZE];
+	char			data[BUFF_SIZE] = {0};
 	t_cmd			cmd;
 	t_log			log = {0};
 	t_exec_cmd		execute[CMD_TAB_LEN];
 
+	printf("Client connected form %s.\n", client->ip);
 	cmd_ini(execute);
 	while ((cmd = parse_cmd(client, data)) != QUIT)
 	{
+		printf("%s - cmd : %s\n", client->ip, data);
 		if (execute[cmd](client, data, &log) == ERROR)
 			write_log(&log);
 		bzero(data, sizeof(data));
@@ -52,6 +56,7 @@ static void		launch_server(t_net *client)
 	}
 	if (execute[cmd](client, data, &log) == ERROR)
 		write_log(&log);
+	printf("Connection closed.\n");
 }
 
 int				main(int argc, char *argv[])

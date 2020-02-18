@@ -6,35 +6,33 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 22:46:52 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/18 16:31:26 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/18 17:07:41 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FTP_H
 # define FTP_H
 
-/*FTP server*/
+/* Libc headers */
 # include <sys/socket.h>
 # include <netinet/in.h>
+# include <arpa/inet.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
 # include <errno.h>
 # include <string.h>
 # include <time.h>
-/*for getting file size using stat()*/
 # include <sys/stat.h>
-/*for sendfile()*/
 # include <sys/types.h>
 # include <sys/uio.h>
-/*for O_RDONLY*/
 # include <fcntl.h>
 
-/*Global Define*/
+/* Globals macros */
 # define ERROR			-1
 # define BUFF_SIZE		256
 
-/*Implemented commands list*/
+/* Implemented commands enum */
 typedef enum			e_cmd
 {
 	LS,
@@ -47,19 +45,20 @@ typedef enum			e_cmd
 	UNKNOWN
 }						t_cmd;
 
-/*Shortcut typedef*/
+/* Shortcut typedef */
 typedef struct stat		t_stat;
 typedef struct sockaddr	t_addr;
 
-/*Networking struct*/
+/* Networking struct */
 typedef struct			s_connection
 {
 	struct sockaddr_in	addr;
 	int					sock;
 	socklen_t			len;
+	char				*ip;
 }						t_net;
 
-/*File handling struct*/
+/* File handling struct */
 typedef struct			s_file
 {
 	char				*name;
@@ -67,6 +66,5 @@ typedef struct			s_file
 	off_t				size;
 	int					fd;
 }						t_file;
-
 
 #endif
