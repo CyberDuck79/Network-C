@@ -6,14 +6,14 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 00:27:00 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/18 11:41:48 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/18 22:57:14 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cmd.h"
+#include "cmd/cmd.h"
 #include "cmd_ini.h"
 
-void			cmd_ini(t_exec_cmd cmd_tab[CMD_TAB_LEN])
+void	cmd_ini(t_exec_cmd cmd_tab[CMD_TAB_LEN])
 {
 	cmd_tab[LS] = cmd_ls;
 	cmd_tab[GET] = cmd_get;
