@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 12:49:53 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/17 19:45:32 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/18 14:42:01 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int main(void)
 {
-	t_connection	server;
+	t_net	server;
 	char			data[1024];
 
 	/* Création de la socket */

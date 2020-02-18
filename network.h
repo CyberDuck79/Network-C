@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:42:40 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/17 20:28:11 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/18 14:42:01 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,19 +70,19 @@ typedef struct	s_connection
 	int			port;
 	socklen_t	addr_len;
 	t_sock_in	addr;
-}				t_connection;
+}				t_net;
 
-int				connection_ini(t_connection *this, t_protocol protocol);
-int				connect_to_ip(t_connection *this, char *ip, t_port port);
-int				bind_to_ip(t_connection *this, char *ip, t_port port);
-int				bind_to_mask(t_connection *this, u_int32_t ip, t_port port);
-int				connect_to_host(t_connection *this, char *hostname, t_port port);
-int				bind_to_host(t_connection *this, char *hostname, t_port port);
-int				listen_connection(t_connection *this, int queue);
-int				accept_connection(t_connection *from, t_connection *to);
-int				send_to(t_connection *to, void *buffer, size_t len);
-int				receive_from(t_connection *from, void *buffer, size_t len);
-void			close_connection(t_connection *this);
-int				shutdown_connection(t_connection *this, t_direction flag);
+int				connection_ini(t_net *this, t_protocol protocol);
+int				connect_to_ip(t_net *this, char *ip, t_port port);
+int				bind_to_ip(t_net *this, char *ip, t_port port);
+int				bind_to_mask(t_net *this, u_int32_t ip, t_port port);
+int				connect_to_host(t_net *this, char *hostname, t_port port);
+int				bind_to_host(t_net *this, char *hostname, t_port port);
+int				listen_connection(t_net *this, int queue);
+int				accept_net(t_net *from, t_net *to);
+int				send_to(t_net *to, void *buffer, size_t len);
+int				receive_from(t_net *from, void *buffer, size_t len);
+void			close_connection(t_net *this);
+int				shutdown_connection(t_net *this, t_direction flag);
 
 #endif

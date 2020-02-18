@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 00:29:06 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/18 08:54:39 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/18 15:51:13 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,16 @@
 # define CMD_H
 
 # include "server.h"
+# include "log.h"
 
-void	cmd_ls(t_connection *client, char data[BUFF_SIZE]);
-void	cmd_get(t_connection *client, char data[BUFF_SIZE]);
-void	cmd_put(t_connection *client, char data[BUFF_SIZE]);
-void	cmd_pwd(t_connection *client, char data[BUFF_SIZE]);
-void	cmd_quit(t_connection *client, char data[BUFF_SIZE]);
-void	cmd_unknown(t_connection *client, char data[BUFF_SIZE]);
+# define FILE_BUFF 4096
+
+int		cmd_ls(t_net *client, char data[BUFF_SIZE], t_log *log);
+int		cmd_get(t_net *client, char data[BUFF_SIZE], t_log *log);
+int		cmd_put(t_net *client, char data[BUFF_SIZE], t_log *log);
+int		cmd_pwd(t_net *client, char data[BUFF_SIZE], t_log *log);
+int		cmd_cd(t_net *client, char data[BUFF_SIZE], t_log *log);
+int		cmd_quit(t_net *client, char data[BUFF_SIZE], t_log *log);
+int		cmd_unknown(t_net *client, char data[BUFF_SIZE], t_log *log);
 
 #endif

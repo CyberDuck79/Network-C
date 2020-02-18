@@ -1,26 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmd_ini.c                                          :+:      :+:    :+:   */
+/*   cmd_unknown.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/18 00:27:00 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/18 11:41:48 by fhenrion         ###   ########.fr       */
+/*   Created: 2020/02/18 11:45:26 by fhenrion          #+#    #+#             */
+/*   Updated: 2020/02/18 16:15:33 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cmd.h"
-#include "cmd_ini.h"
 
-void			cmd_ini(t_exec_cmd cmd_tab[CMD_TAB_LEN])
+int		cmd_unknown(t_net *client, char data[BUFF_SIZE], t_log *log)
 {
-	cmd_tab[LS] = cmd_ls;
-	cmd_tab[GET] = cmd_get;
-	cmd_tab[PUT] = cmd_put;
-	cmd_tab[PWD] = cmd_pwd;
-	cmd_tab[CD] = cmd_cd;
-	cmd_tab[BYE] = cmd_quit;
-	cmd_tab[QUIT] = cmd_quit;
-	cmd_tab[UNKNOWN] = cmd_unknown;
+	time_t	log_time = time(NULL);
+
+	(void)client;
+	log_error(&log_time, log, data, CMD);
+	return (log->error);
 }

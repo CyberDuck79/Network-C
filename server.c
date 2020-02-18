@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:41:59 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/17 20:25:42 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/18 14:42:01 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int main(void)
 {
-	t_connection	client;
-	t_connection	server;
+	t_net	client;
+	t_net	server;
 	char			text[] = "hello world\n";
 
 	/* Création d'une socket */
@@ -32,7 +32,7 @@ int main(void)
 			{
 				/* Attente pendant laquelle le client se connecte */
 				printf("Patientez sur le port %d...\n", 23);
-				accept_connection(&server, &client);
+				accept_net(&server, &client);
 				printf("Un client se connecte avec la socket %d de %s:%d\n",\
 				 client.socket, client.ip, client.port);
 				if (send_to(&client, text, sizeof(text)) == SOCKET_ERROR)

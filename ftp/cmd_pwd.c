@@ -1,34 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmd_get.c                                          :+:      :+:    :+:   */
+/*   cmd_pwd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/18 00:37:41 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/18 16:32:22 by fhenrion         ###   ########.fr       */
+/*   Created: 2020/02/18 11:22:15 by fhenrion          #+#    #+#             */
+/*   Updated: 2020/02/18 16:32:46 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cmd.h"
 
-// TODO -> ajouter log erreur dans commande + ecriture log
-int		cmd_get(t_net *client, char data[BUFF_SIZE], t_log *log)
+int		cmd_pwd(t_net *client, char data[BUFF_SIZE], t_log *log)
 {
 	t_file	file = {0};
 	time_t	log_time = time(NULL);
 
-	file.name = &data[4];
-	stat(file.name, &file.stat);
+	(void)data;
+	system("pwd > pwd.send");
+	stat("pwd.send", &file.stat);
 	file.size = file.stat.st_size;
-	file.fd = open(file.name, O_RDONLY);
+	file.fd = open("pwd.send", O_RDONLY);
 	if (send(client->sock, &file.size, sizeof(int), 0) == ERROR)
-		log_error(&log_time, log, file.name, SIZE);
-	else if (file.fd == ERROR)
-		log_error(&log_time, log, file.name, READ);
-	else if (file.size)
-		if (sendfile(client->sock, file.fd, 0, &file.size, NULL, 0) == ERROR)
-			log_error(&log_time, log, file.name, SEND);
+		log_error(&log_time, log, "pwd size", SIZE);
+	if (file.fd == ERROR)
+		log_error(&log_time, log, "pwd cmd", READ);
+	else if (sendfile(client->sock, file.fd, 0, &file.size, NULL, 0) == ERROR)
+		log_error(&log_time, log, "pwd cmd", SEND);
 	close(file.fd);
+	system("rm pwd.send");
 	return (log->error);
 }

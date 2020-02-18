@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 19:52:28 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/17 21:33:15 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/18 14:42:01 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	print_presentation(void)
 	return (answer);
 }
 
-static int	print_connection(void)
+static int	print_net(void)
 {
 	int	answer;
 
@@ -41,15 +41,15 @@ static int	print_connection(void)
 
 static int	wait_for_connection(void)
 {
-	t_connection	host;
-	t_connection	guest;
+	t_net	host;
+	t_net	guest;
 
 	if (connection_ini(&host, TCP_IP) != INVALID_SOCKET)
 	{
 		if (bind_to_mask(&host, INADDR_ANY, TERMCHAT) != SOCKET_ERROR)
 		{
 			printf("En attente d'un hote sur le port %d...\n", TERMCHAT); // mettre le hostname et l'ip
-			accept_connection(&host, &guest);
+			accept_net(&host, &guest);
 			printf("Un invité se connecte depuis %s\n", guest.ip); // mettre le hostname
 			launch_tchat(&host, &guest);
 		}
@@ -81,7 +81,7 @@ int			main(void)
 			exit(errno);
 	if (answer == 2)
 	{
-		if ((answer = print_connection()) == -1)
+		if ((answer = print_net()) == -1)
 		{
 			perror("input");
 			exit(errno);

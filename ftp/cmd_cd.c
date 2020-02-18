@@ -1,26 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmd_ini.c                                          :+:      :+:    :+:   */
+/*   cmd_cd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/18 00:27:00 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/18 11:41:48 by fhenrion         ###   ########.fr       */
+/*   Created: 2020/02/18 11:32:41 by fhenrion          #+#    #+#             */
+/*   Updated: 2020/02/18 16:10:21 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cmd.h"
-#include "cmd_ini.h"
 
-void			cmd_ini(t_exec_cmd cmd_tab[CMD_TAB_LEN])
+int		cmd_cd(t_net *client, char data[BUFF_SIZE], t_log *log)
 {
-	cmd_tab[LS] = cmd_ls;
-	cmd_tab[GET] = cmd_get;
-	cmd_tab[PUT] = cmd_put;
-	cmd_tab[PWD] = cmd_pwd;
-	cmd_tab[CD] = cmd_cd;
-	cmd_tab[BYE] = cmd_quit;
-	cmd_tab[QUIT] = cmd_quit;
-	cmd_tab[UNKNOWN] = cmd_unknown;
+	int		ret = chdir(data + 3) ? 0 : 1;
+	time_t	log_time = time(NULL);
+
+	if (send(client->sock, &ret, sizeof(int), 0) == ERROR)
+		log_error(&log_time, log, "cd cmd return", SEND);
+	return (log->error);
 }

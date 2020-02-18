@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 22:46:52 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/18 10:44:11 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/18 16:31:26 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <stdio.h>
 # include <errno.h>
 # include <string.h>
+# include <time.h>
 /*for getting file size using stat()*/
 # include <sys/stat.h>
 /*for sendfile()*/
@@ -28,7 +29,6 @@
 # include <sys/uio.h>
 /*for O_RDONLY*/
 # include <fcntl.h>
-#include "cmd_ini.h"
 
 /*Global Define*/
 # define ERROR			-1
@@ -41,16 +41,11 @@ typedef enum			e_cmd
 	GET,
 	PUT,
 	PWD,
+	CD,
 	BYE,
 	QUIT,
 	UNKNOWN
 }						t_cmd;
-
-/*Command parsing array*/
-# define CMD_TAB_LEN	7
-# define CMD_STR_TAB	{"ls", "get", "put", "pwd", "bye", "quit", ""}
-# define CMD_LEN_TAB 	{2, 3, 3, 3, 3, 4, 0}
-# define CMD_TAB		{LS, GET, PUT, PWD, BYE, QUIT, UNKNOWN}
 
 /*Shortcut typedef*/
 typedef struct stat		t_stat;
@@ -62,6 +57,16 @@ typedef struct			s_connection
 	struct sockaddr_in	addr;
 	int					sock;
 	socklen_t			len;
-}						t_connection;
+}						t_net;
+
+/*File handling struct*/
+typedef struct			s_file
+{
+	char				*name;
+	t_stat				stat;
+	off_t				size;
+	int					fd;
+}						t_file;
+
 
 #endif
