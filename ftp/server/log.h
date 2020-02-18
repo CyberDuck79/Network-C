@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 14:42:42 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/18 16:59:07 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/18 22:38:23 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@
 # include "server.h"
 
 /* Error log messages macros */
-# define LOG_READ "Impossible to read file"
-# define LOG_SIZE "Impossible to send size"
-# define LOG_SEND "Impossible to send file"
-# define LOG_RECV "Impossible to receive file"
-# define LOG_CLOSE "Error while closing connection"
+# define LOG_READ "Read file error:"
+# define LOG_SIZE "Send size error:"
+# define LOG_SEND "Send file error:"
+# define LOG_RECV "Receive file error:"
+# define LOG_CLOSE "Closing connection error:"
 # define LOG_CMD "Error command unknown"
 # define LOG_MSG_TAB {LOG_READ,LOG_SIZE,LOG_SEND,LOG_RECV,LOG_CLOSE,LOG_CMD}
 
