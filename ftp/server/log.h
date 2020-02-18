@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 14:42:42 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/18 22:38:23 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/19 00:24:58 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@
 # include "server.h"
 
 /* Error log messages macros */
-# define LOG_READ "Read file error:"
-# define LOG_SIZE "Send size error:"
-# define LOG_SEND "Send file error:"
-# define LOG_RECV "Receive file error:"
-# define LOG_CLOSE "Closing connection error:"
+# define LOG_READ "Read file error"
+# define LOG_SIZE "Send size error"
+# define LOG_SEND "Send file error"
+# define LOG_RECV "Receive file error"
+# define LOG_CLOSE "Closing connection error"
 # define LOG_CMD "Error command unknown"
 # define LOG_MSG_TAB {LOG_READ,LOG_SIZE,LOG_SEND,LOG_RECV,LOG_CLOSE,LOG_CMD}
 
@@ -47,6 +47,6 @@ typedef struct	s_log
 /* Errors logging function */
 void			log_error(time_t *log_time, t_log *log, char *name, t_error i);
 /* Error logs writing function */
-void			write_log(t_log *log);
+void			write_log(t_net *client, t_log *log);
 
 #endif

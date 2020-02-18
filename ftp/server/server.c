@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 22:47:38 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/18 17:10:32 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/19 00:32:59 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,35 +28,43 @@ static int		server_ini(t_net *server, int port)
 
 static int		wait_for_client(t_net *server, t_net *client)
 {
-	printf("Waiting for connection on port %d...\n", server->addr.sin_port);
-	if (listen(server->sock, 1) == ERROR)
-		return (ERROR);
+	pid_t	pid = 1;
+
 	client->len = sizeof(client->addr);
-	client->sock = accept(server->sock, (t_addr*)&client->addr, &client->len);
-	client->ip = inet_ntoa(client->addr.sin_addr);
+	while (pid)
+	{
+		printf("Waiting for connection on port %d...\n", server->addr.sin_port);
+		if (listen(server->sock, 1) == ERROR)
+			return (ERROR);
+		client->sock = accept(server->sock, (t_addr*)&client->addr, &client->len);
+		if ((pid = fork()) == 0)
+			client->ip = inet_ntoa(client->addr.sin_addr);
+	}
 	return (0);
 }
 
 static void		launch_server(t_net *client)
 {
 	char			data[BUFF_SIZE] = {0};
-	t_cmd			cmd;
 	t_log			log = {0};
+	t_cmd			cmd;
 	t_exec_cmd		execute[CMD_TAB_LEN];
 
-	printf("Client connected form %s.\n", client->ip);
+	printf("Client connected from %s:%i\n", client->ip, client->addr.sin_port);
 	cmd_ini(execute);
 	while ((cmd = parse_cmd(client, data)) != QUIT)
 	{
-		printf("%s - cmd : %s\n", client->ip, data);
+		printf("%s:%i - cmd : %s\n", client->ip, client->addr.sin_port, data);
 		if (execute[cmd](client, data, &log) == ERROR)
-			write_log(&log);
+			write_log(client, &log);
 		bzero(data, sizeof(data));
 		bzero(&log, sizeof(t_log));
 	}
+	printf("%s:%i - cmd : %s\n", client->ip, client->addr.sin_port, data);
 	if (execute[cmd](client, data, &log) == ERROR)
-		write_log(&log);
-	printf("Connection closed.\n");
+		write_log(client, &log);
+	printf("Connection closed with %s:%i\n", client->ip, client->addr.sin_port);
+	bzero(client, sizeof(t_net));
 }
 
 int				main(int argc, char *argv[])
