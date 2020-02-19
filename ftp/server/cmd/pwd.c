@@ -1,17 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmd_pwd.c                                          :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 11:22:15 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/18 22:25:23 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/19 01:35:41 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cmd.h"
 
+/* pwd command function */
 int		cmd_pwd(t_net *client, char data[BUFF_SIZE], t_log *log)
 {
 	t_file	file = {0};
@@ -30,5 +31,5 @@ int		cmd_pwd(t_net *client, char data[BUFF_SIZE], t_log *log)
 		log_error(&log_time, log, "pwd cmd", SEND);
 	close(file.fd);
 	system("rm pwd.send");
-	return (log->error);
+	return (log->ret);
 }

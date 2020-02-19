@@ -1,17 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmd_ls.c                                           :+:      :+:    :+:   */
+/*   ls.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 00:32:50 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/18 22:25:12 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/19 01:35:27 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cmd.h"
 
+/* ls command function */
 int		cmd_ls(t_net *client, char data[BUFF_SIZE], t_log *log)
 {
 	t_file	file = {0};
@@ -30,5 +31,5 @@ int		cmd_ls(t_net *client, char data[BUFF_SIZE], t_log *log)
 		log_error(&log_time, log, "ls cmd", SEND);
 	close(file.fd);
 	system("rm ls.send");
-	return (log->error);
+	return (log->ret);
 }

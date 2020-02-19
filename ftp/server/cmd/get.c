@@ -6,13 +6,13 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 00:37:41 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/19 00:44:04 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/19 01:35:21 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cmd.h"
 
-// TODO -> ajouter log erreur dans commande + ecriture log
+/* get command function */
 int		cmd_get(t_net *client, char data[BUFF_SIZE], t_log *log)
 {
 	t_file	file = {0};
@@ -30,5 +30,5 @@ int		cmd_get(t_net *client, char data[BUFF_SIZE], t_log *log)
 		if (sendfile(file.fd, client->sock, 0, &file.size, NULL, 0) == ERROR)
 			log_error(&log_time, log, file.name, SEND);
 	close(file.fd);
-	return (log->error);
+	return (log->ret);
 }

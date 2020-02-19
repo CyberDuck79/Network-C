@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 14:42:42 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/19 00:24:58 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/19 01:22:06 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ typedef enum	e_error
 /* Log struct */
 typedef struct	s_log
 {
-	int			error;
-	const char	*message;
+	int			ret;
+	t_error		error;
 	char		*name;
 	char		*time;
 }				t_log;

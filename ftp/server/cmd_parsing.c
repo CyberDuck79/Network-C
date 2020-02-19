@@ -6,16 +6,18 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 10:47:06 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/18 14:42:01 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/19 01:34:09 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cmd_parsing.h"
 
+/* Commands parsing informations arrays */
 static const char	*cmd_str[CMD_TAB_LEN] = CMD_STR_TAB;
 static const size_t	cmd_len[CMD_TAB_LEN] = CMD_LEN_TAB;
 static const t_cmd	cmd[CMD_TAB_LEN] = CMD_TAB;
 
+/* Command parsing to index function */
 t_cmd		parse_cmd(t_net *client, char data[BUFF_SIZE])
 {
 	size_t				index = 0;

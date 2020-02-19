@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 22:47:38 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/19 00:32:59 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/19 01:29:54 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "cmd_parsing.h"
 #include "log.h"
 
+/* Serveur initialization function */
 static int		server_ini(t_net *server, int port)
 {
 	printf("Server initialization...\n");
@@ -26,6 +27,8 @@ static int		server_ini(t_net *server, int port)
 	return (bind(server->sock, (t_addr*)&server->addr, server->len));
 }
 
+// TODO : Commande de login, refaire le client
+/* Connections manager function */
 static int		wait_for_client(t_net *server, t_net *client)
 {
 	pid_t	pid = 1;
@@ -43,6 +46,7 @@ static int		wait_for_client(t_net *server, t_net *client)
 	return (0);
 }
 
+/* Client request handling function */
 static void		launch_server(t_net *client)
 {
 	char			data[BUFF_SIZE] = {0};
@@ -67,6 +71,7 @@ static void		launch_server(t_net *client)
 	bzero(client, sizeof(t_net));
 }
 
+/* Main Controller function */
 int				main(int argc, char *argv[])
 {
 	t_net	server;

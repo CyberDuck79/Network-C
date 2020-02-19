@@ -1,17 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmd_put.c                                          :+:      :+:    :+:   */
+/*   put.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 11:04:49 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/18 22:25:18 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/19 01:35:33 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cmd.h"
 
+/* put command function */
 int		cmd_put(t_net *client, char data[BUFF_SIZE], t_log *log)
 {
 	char	buffer[FILE_BUFF];
@@ -35,5 +36,5 @@ int		cmd_put(t_net *client, char data[BUFF_SIZE], t_log *log)
 		log_error(&log_time, log, file.name, RECV);
 	close(file.fd);
 	send(client->sock, &writed, sizeof(int), 0);
-	return (log->error);
+	return (log->ret);
 }

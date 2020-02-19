@@ -6,13 +6,14 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 00:27:00 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/18 22:57:14 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/19 01:34:34 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cmd/cmd.h"
 #include "cmd_ini.h"
 
+/* Command functions array intialization function */
 void	cmd_ini(t_exec_cmd cmd_tab[CMD_TAB_LEN])
 {
 	cmd_tab[LS] = cmd_ls;
