@@ -1,32 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.h                                           :+:      :+:    :+:   */
+/*   client.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/17 22:46:52 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/19 11:54:24 by fhenrion         ###   ########.fr       */
+/*   Created: 2020/02/19 10:37:30 by fhenrion          #+#    #+#             */
+/*   Updated: 2020/02/19 17:48:27 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FTP_H
-# define FTP_H
+#ifndef CLIENT_H
+# define CLIENT_H
 
 /* Libc headers */
 # include <sys/socket.h>
 # include <netinet/in.h>
-# include <arpa/inet.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <stdio.h>
-# include <errno.h>
 # include <string.h>
-# include <time.h>
+# include <stdio.h>
+# include <stdlib.h>
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/uio.h>
 # include <fcntl.h>
+# include <errno.h>
+# include <unistd.h>
 
 /* Globals macros */
 # define ERROR			-1
@@ -40,9 +38,7 @@ typedef enum			e_cmd
 	PUT,
 	PWD,
 	CD,
-	BYE,
 	QUIT,
-	UNKNOWN
 }						t_cmd;
 
 /* Shortcut typedef */
@@ -61,9 +57,9 @@ typedef struct			s_net
 /* File handling struct */
 typedef struct			s_file
 {
-	char				*name;
+	char				name[256];
 	t_stat				stat;
-	off_t				size;
+	int					size;
 	char				*data;
 	int					fd;
 }						t_file;

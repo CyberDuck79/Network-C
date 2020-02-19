@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 22:47:38 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/19 01:29:54 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/19 18:02:19 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ static int		wait_for_client(t_net *server, t_net *client)
 	pid_t	pid = 1;
 
 	client->len = sizeof(client->addr);
+	printf("Waiting for connection on port %d...\n", server->addr.sin_port);
 	while (pid)
 	{
-		printf("Waiting for connection on port %d...\n", server->addr.sin_port);
 		if (listen(server->sock, 1) == ERROR)
 			return (ERROR);
 		client->sock = accept(server->sock, (t_addr*)&client->addr, &client->len);
@@ -49,26 +49,27 @@ static int		wait_for_client(t_net *server, t_net *client)
 /* Client request handling function */
 static void		launch_server(t_net *client)
 {
-	char			data[BUFF_SIZE] = {0};
-	t_log			log = {0};
+	char			data[BUFF_SIZE];
+	t_log			log;
 	t_cmd			cmd;
 	t_exec_cmd		execute[CMD_TAB_LEN];
 
 	printf("Client connected from %s:%i\n", client->ip, client->addr.sin_port);
 	cmd_ini(execute);
+	bzero(data, BUFF_SIZE);
+	bzero(&log, sizeof(t_log));
 	while ((cmd = parse_cmd(client, data)) != QUIT)
 	{
 		printf("%s:%i - cmd : %s\n", client->ip, client->addr.sin_port, data);
 		if (execute[cmd](client, data, &log) == ERROR)
 			write_log(client, &log);
-		bzero(data, sizeof(data));
+		bzero(data, BUFF_SIZE);
 		bzero(&log, sizeof(t_log));
 	}
 	printf("%s:%i - cmd : %s\n", client->ip, client->addr.sin_port, data);
 	if (execute[cmd](client, data, &log) == ERROR)
 		write_log(client, &log);
 	printf("Connection closed with %s:%i\n", client->ip, client->addr.sin_port);
-	bzero(client, sizeof(t_net));
 }
 
 /* Main Controller function */

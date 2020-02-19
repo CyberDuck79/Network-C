@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 11:04:49 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/19 01:35:33 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/19 11:56:59 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,7 @@
 /* put command function */
 int		cmd_put(t_net *client, char data[BUFF_SIZE], t_log *log)
 {
-	char	buffer[FILE_BUFF];
-	int		writed = 0;
-	t_file	file = {0};
+	t_file	file;
 	time_t	log_time = time(NULL);
 
 	file.name = &data[4];
@@ -25,16 +23,18 @@ int		cmd_put(t_net *client, char data[BUFF_SIZE], t_log *log)
 		log_error(&log_time, log, file.name, RECV);
 	else if (file.size)
 	{
-		file.fd = open(file.name, O_CREAT | O_EXCL | O_WRONLY, 0666);
+		file.data = malloc(file.size);
+		file.size = recv(client->sock, file.data, file.size, 0);
+		file.fd = open(file.name, O_CREAT | O_WRONLY, 0666);
 		if (file.fd == ERROR)
-			log_error(&log_time, log, file.name, READ);
+			log_error(&log_time, log, file.name, WRITE);
 		else
-			while ((file.size = recv(client->sock, buffer, FILE_BUFF, 0)) > 0)
-				writed += write(file.fd, buffer, file.size);
+			write(file.fd, file.data, file.size);
 	}
 	if (file.size == ERROR)
 		log_error(&log_time, log, file.name, RECV);
+	free(file.data);
 	close(file.fd);
-	send(client->sock, &writed, sizeof(int), 0);
-	return (log->ret);
+	send(client->sock, &file.size, sizeof(int), 0);
+	return (log->error ? ERROR : EXIT_SUCCESS);
 }

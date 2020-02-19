@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 14:42:42 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/19 01:22:06 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/19 10:25:19 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,19 @@
 
 /* Error log messages macros */
 # define LOG_READ "Read file error"
+# define LOG_WRITE "Write file error"
 # define LOG_SIZE "Send size error"
 # define LOG_SEND "Send file error"
 # define LOG_RECV "Receive file error"
 # define LOG_CLOSE "Closing connection error"
 # define LOG_CMD "Error command unknown"
-# define LOG_MSG_TAB {LOG_READ,LOG_SIZE,LOG_SEND,LOG_RECV,LOG_CLOSE,LOG_CMD}
+# define LOG_MSG_TAB {LOG_READ,LOG_WRITE,LOG_SIZE,LOG_SEND,LOG_RECV,LOG_CLOSE,LOG_CMD}
 
 /* Error type enum */
 typedef enum	e_error
 {
 	READ,
+	WRITE,
 	SIZE,
 	SEND,
 	RECV,
@@ -38,8 +40,8 @@ typedef enum	e_error
 /* Log struct */
 typedef struct	s_log
 {
-	int			ret;
-	t_error		error;
+	int			error;
+	t_error		msg_i;
 	char		*name;
 	char		*time;
 }				t_log;

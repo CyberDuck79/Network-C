@@ -1,24 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
+/*   cmd_ini.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/18 11:32:41 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/19 11:44:33 by fhenrion         ###   ########.fr       */
+/*   Created: 2020/02/18 08:48:17 by fhenrion          #+#    #+#             */
+/*   Updated: 2020/02/19 11:29:33 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cmd.h"
+#ifndef CMD_INI_H
+# define CMD_INI_H
 
-/* cd command function */
-int		cmd_cd(t_net *client, char data[BUFF_SIZE], t_log *log)
-{
-	int		ret = chdir(data + 3) ? 0 : 1;
-	time_t	log_time = time(NULL);
+# include "client.h"
 
-	if (send(client->sock, &ret, sizeof(int), 0) == ERROR)
-		log_error(&log_time, log, "cd cmd return", SEND);
-	return (log->error ? ERROR : EXIT_SUCCESS);
-}
+# define CMD_TAB_LEN 6
+
+/* Typedef commands array */
+typedef int		(*t_exec_cmd)(t_net *server, char data[BUFF_SIZE]);
+
+/* Commands array initialization function */
+void			cmd_ini(t_exec_cmd cmd_tab[CMD_TAB_LEN]);
+
+#endif

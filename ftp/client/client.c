@@ -1,142 +1,66 @@
-/*FTP Client*/
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   client.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/02/19 10:38:51 by fhenrion          #+#    #+#             */
+/*   Updated: 2020/02/19 18:20:10 by fhenrion         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "client.h"
+#include "cmd_ini.h"
 
-/*for getting file size using stat()*/
-#include<sys/stat.h>
-
-/*for sendfile()*/
-# include <sys/types.h>
-# include <sys/uio.h>
-
-/*for O_RDONLY*/
-#include<fcntl.h>
-
-int main(int argc,char *argv[])
+static int		client_ini(t_net *server, int port)
 {
-	struct sockaddr_in server;
-	struct stat obj;
-	int sock;
-	int choice;
-	char buf[100], command[5], filename[20], *f;
-	int k, size, status;
-	int filehandle;
-	sock = socket(AF_INET, SOCK_STREAM, 0);
-	if (sock == -1)
+	if ((server->sock = socket(AF_INET, SOCK_STREAM, 0)) == ERROR)
+		return (ERROR);
+	server->len = sizeof (server->addr);
+	server->addr.sin_family = AF_INET;
+	server->addr.sin_port = port;
+	server->addr.sin_addr.s_addr = 0;
+	return (connect(server->sock, (t_addr*)&server->addr, server->len));
+}
+
+static t_cmd	get_cmd(void)
+{
+	char	input[256];
+	t_cmd	cmd = 0;
+
+	while (cmd < 1 || cmd > 6)
 	{
-		printf("socket creation failed");
-		exit(1);
+		printf("Enter a choice:\n1- ls\n2- get\n3- put\n4- pwd\n5- cd\n6- quit\n");
+		scanf("%s", input);
+		cmd = atoi(input);
 	}
-	server.sin_family = AF_INET;
-	server.sin_port = atoi(argv[1]);
-	server.sin_addr.s_addr = 0;
-	k = connect(sock,(struct sockaddr*)&server, sizeof(server));
-	if (k == -1)
+	return (cmd - 1);
+}
+
+int				main(int argc,char *argv[])
+{
+	t_net		server;
+	char		data[BUFF_SIZE];
+	t_cmd		cmd;
+	t_exec_cmd	execute[6];
+
+	if (argc == 1)
 	{
-		printf("Connect Error");
-		exit(1);
+		printf("Enter a port number to launch the client\n");
+		return (0);
 	}
-	while (1)
+	if (client_ini(&server, atoi(argv[1])) == ERROR)
+		exit(errno);
+	cmd_ini(execute);
+	bzero(data, BUFF_SIZE);
+	while ((cmd = get_cmd()) != QUIT)
 	{
-		printf("Enter a choice:\n1- get\n2- put\n3- pwd\n4- ls\n5- cd\n6- quit\n");
-		scanf("%d", &choice);
-		switch (choice)
-		{
-		case 1:
-			printf("Enter filename to get: ");
-			scanf("%s", filename);
-			strcpy(buf, "get ");
-			strcat(buf, filename);
-			send(sock, buf, 100, 0);
-			recv(sock, &size, sizeof(int), 0);
-			if (!size)
-			{
-				printf("No such file on the remote directory\n\n");
-				break;
-			}
-			f = malloc(size);
-			recv(sock, f, size, 0);
-			while (1)
-			{
-				filehandle = open(filename, O_CREAT | O_WRONLY, 0644);
-				if (filehandle == -1)
-				{
-					sprintf(filename + strlen(filename), "%d", 1);//needed only if same directory is used for both server and client
-				}
-				else
-					break;
-			}
-			write(filehandle, f, size, 0);
-			close(filehandle);
-			strcpy(buf, "cat ");
-			strcat(buf, filename);
-			system(buf);
-			break;
-		case 2:
-			printf("Enter filename to put to server: ");
-			scanf("%s", filename);
-			filehandle = open(filename, O_RDONLY);
-			if (filehandle == -1)
-			{
-				printf("No such file on the local directory\n\n");
-				break;
-			}
-			strcpy(buf, "put ");
-			strcat(buf, filename);
-			send(sock, buf, 100, 0);
-			stat(filename, &obj);
-			size = obj.st_size;
-			send(sock, &size, sizeof(int), 0);
-			sendfile(sock, filehandle, 0, &size, NULL, 0);
-			recv(sock, &status, sizeof(int), 0);
-			if (status)
-				printf("File stored successfully\n");
-			else
-				printf("File failed to be stored to remote machine\n");
-			break;
-		case 3:
-			strcpy(buf, "pwd");
-			send(sock, buf, 100, 0);
-			recv(sock, &size, sizeof(int), 0);
-			f = malloc(size);
-			recv(sock, f, size, 0);
-			printf("The path of the remote directory is:\n");
-			printf("%s", f);
-			break;
-		case 4:
-			strcpy(buf, "ls");
-			send(sock, buf, 100, 0);
-			recv(sock, &size, sizeof(int), 0);
-			f = malloc(size);
-			recv(sock, f, size, 0);
-			printf("The remote directory listing is as follows:\n");
-			printf("%s", f);
-			break;
-		case 5:
-			strcpy(buf, "cd ");
-			printf("Enter the path to change the remote directory: ");
-			scanf("%s", buf + 3);
-			send(sock, buf, 100, 0);
-			recv(sock, &status, sizeof(int), 0);
-			if (status)
-				printf("Remote directory successfully changed\n");
-			else
-				printf("Remote directory failed to change\n");
-			break;
-		case 6:
-			strcpy(buf, "quit");
-			send(sock, buf, 100, 0);
-			recv(sock, &status, 100, 0);
-			if (status)
-			{
-				printf("Server closed\nQuitting..\n");
-				exit(0);
-			}
-			printf("Server failed to close connection\n");
-		}
+		if (execute[cmd](&server, data) == ERROR)
+			perror("server");
+		bzero(data, BUFF_SIZE);
 	}
+	if (execute[cmd](&server, data) == ERROR)
+		perror("server");
+	return (0);
 }

@@ -1,24 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
+/*   quit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/18 11:32:41 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/19 11:44:33 by fhenrion         ###   ########.fr       */
+/*   Created: 2020/02/19 17:12:20 by fhenrion          #+#    #+#             */
+/*   Updated: 2020/02/19 17:15:31 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cmd.h"
 
-/* cd command function */
-int		cmd_cd(t_net *client, char data[BUFF_SIZE], t_log *log)
+int		cmd_quit(t_net *server, char data[BUFF_SIZE])
 {
-	int		ret = chdir(data + 3) ? 0 : 1;
-	time_t	log_time = time(NULL);
+	int	status;
 
-	if (send(client->sock, &ret, sizeof(int), 0) == ERROR)
-		log_error(&log_time, log, "cd cmd return", SEND);
-	return (log->error ? ERROR : EXIT_SUCCESS);
+	strcpy(data, "quit");
+	if (send(server->sock, data, BUFF_SIZE, 0) == ERROR)
+		return (ERROR);
+	if (recv(server->sock, &status, sizeof(int), 0) == ERROR)
+		return (ERROR);
+	if (status)
+		printf("Server closed\nQuitting..\n");
+	else
+		dprintf(STDERR_FILENO, "Server failed to close connection\n");
+	return (EXIT_SUCCESS);
 }
