@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 22:46:52 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/19 11:54:24 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/24 11:58:08 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 /* Implemented commands enum */
 typedef enum			e_cmd
 {
+	LOGIN,
 	LS,
 	GET,
 	PUT,
@@ -49,6 +50,15 @@ typedef enum			e_cmd
 typedef struct stat		t_stat;
 typedef struct sockaddr	t_addr;
 
+/* User struct */
+typedef struct		s_user
+{
+	char			*login;
+	char			*password;
+	char			*path;
+	struct s_user	*next;
+}					t_user;
+
 /* Networking struct */
 typedef struct			s_net
 {
@@ -56,16 +66,16 @@ typedef struct			s_net
 	int					sock;
 	socklen_t			len;
 	char				*ip;
+	t_user				*user;
 }						t_net;
 
-/* File handling struct */
-typedef struct			s_file
-{
-	char				*name;
-	t_stat				stat;
-	off_t				size;
-	char				*data;
-	int					fd;
-}						t_file;
+/* Loaded user database */
+t_user	*g_users;
+
+/* User database loading function */
+int						userbase_loading(t_user **users, const char *filename);
+
+/* Parsing util function */
+char					*substr_chr(const char **line, char end);
 
 #endif

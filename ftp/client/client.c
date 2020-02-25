@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/19 10:38:51 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/19 18:20:10 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/24 17:11:28 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ static t_cmd	get_cmd(void)
 		printf("Enter a choice:\n1- ls\n2- get\n3- put\n4- pwd\n5- cd\n6- quit\n");
 		scanf("%s", input);
 		cmd = atoi(input);
+		if (cmd < 1 || cmd > 6)
+			printf("Invalid choice %i", cmd);
 	}
 	return (cmd - 1);
 }
@@ -51,6 +53,8 @@ int				main(int argc,char *argv[])
 		return (0);
 	}
 	if (client_ini(&server, atoi(argv[1])) == ERROR)
+		exit(errno);
+	if (login_promt(&server) == ERROR)
 		exit(errno);
 	cmd_ini(execute);
 	bzero(data, BUFF_SIZE);

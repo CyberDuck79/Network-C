@@ -1,22 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unknown.c                                          :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/18 11:45:26 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/24 12:33:29 by fhenrion         ###   ########.fr       */
+/*   Created: 2020/02/24 11:49:20 by fhenrion          #+#    #+#             */
+/*   Updated: 2020/02/24 11:53:05 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cmd.h"
+#include "server.h"
 
-/* unknown command function */
-int		cmd_unknown(t_net *client, char data[BUFF_SIZE], t_log *log)
+/* return substr of line from start to ending char */
+char		*substr_chr(const char **line, char end)
 {
-	(void)client;
-	errno = ENOSYS;
-	log_error(log, data, CMD);
-	return (log->error ? ERROR : EXIT_SUCCESS);
+	size_t	index;
+	char	*str;
+
+	index = 0;
+	while ((*line)[index] && (*line)[index] != end)
+		index++;
+	if ((*line)[index] == '\0')
+		return (NULL);
+	index++;
+	if ((str = calloc(index, sizeof(char))) == NULL)
+		return (NULL);
+	strlcpy(str, *line, index);
+	*line += (index);
+	return (str);
 }

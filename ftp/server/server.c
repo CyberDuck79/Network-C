@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 22:47:38 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/19 18:02:19 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/24 12:38:37 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ static int		server_ini(t_net *server, int port)
 	return (bind(server->sock, (t_addr*)&server->addr, server->len));
 }
 
-// TODO : Commande de login, refaire le client
 /* Connections manager function */
 static int		wait_for_client(t_net *server, t_net *client)
 {
@@ -54,7 +53,7 @@ static void		launch_server(t_net *client)
 	t_cmd			cmd;
 	t_exec_cmd		execute[CMD_TAB_LEN];
 
-	printf("Client connected from %s:%i\n", client->ip, client->addr.sin_port);
+	printf("Client connection from %s:%i\n", client->ip, client->addr.sin_port);
 	cmd_ini(execute);
 	bzero(data, BUFF_SIZE);
 	bzero(&log, sizeof(t_log));
@@ -62,13 +61,13 @@ static void		launch_server(t_net *client)
 	{
 		printf("%s:%i - cmd : %s\n", client->ip, client->addr.sin_port, data);
 		if (execute[cmd](client, data, &log) == ERROR)
-			write_log(client, &log);
+			write_log(client, &log, "error.log");
 		bzero(data, BUFF_SIZE);
 		bzero(&log, sizeof(t_log));
 	}
 	printf("%s:%i - cmd : %s\n", client->ip, client->addr.sin_port, data);
 	if (execute[cmd](client, data, &log) == ERROR)
-		write_log(client, &log);
+		write_log(client, &log, "error.log");
 	printf("Connection closed with %s:%i\n", client->ip, client->addr.sin_port);
 }
 
@@ -84,9 +83,11 @@ int				main(int argc, char *argv[])
 		return (0);
 	}
 	if (server_ini(&server, atoi(argv[1])) == ERROR)
-		exit(errno);
+		error_exit();
+	if (userbase_loading(&g_users, "userbase.db") == ERROR)
+		error_exit();
 	if (wait_for_client(&server, &client) == ERROR)
-		exit(errno);
+		error_exit();
 	launch_server(&client);
 	close(server.sock);
 	bzero(&server, sizeof(t_net));

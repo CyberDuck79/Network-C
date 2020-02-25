@@ -6,14 +6,14 @@
 #    By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/02/18 11:52:41 by fhenrion          #+#    #+#              #
-#    Updated: 2020/02/18 22:50:58 by fhenrion         ###   ########.fr        #
+#    Updated: 2020/02/24 12:42:51 by fhenrion         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ftp_server
 
-SRC_NAME = server log cmd_ini cmd_parsing cmd/ls cmd/get cmd/put cmd/pwd \
-cmd/cd cmd/quit cmd/unknown
+SRC_NAME = server log user utils cmd_ini cmd_parsing cmd/ls cmd/get cmd/put \
+cmd/pwd cmd/cd cmd/quit cmd/login cmd/unknown
 SRC = $(addsuffix .c,$(SRC_NAME))
 SRC_O = $(addsuffix .o,$(SRC_NAME))
 
