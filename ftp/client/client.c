@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/19 10:38:51 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/24 17:11:28 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/26 12:30:04 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,58 @@ static t_cmd	get_cmd(void)
 		scanf("%s", input);
 		cmd = atoi(input);
 		if (cmd < 1 || cmd > 6)
-			printf("Invalid choice %i", cmd);
+			printf("Invalid choice %i\n", cmd);
 	}
 	return (cmd - 1);
+}
+
+static int		login_prompt(t_net *server)
+{
+	char	data[BUFF_SIZE];
+	size_t	len;
+	int		ret;
+
+	bzero(data, BUFF_SIZE);
+	strlcpy(data, "login ", 7);
+	printf("Please enter your login :\n");
+	scanf("%s", &data[6]);
+	len = strlen(data);
+	data[len] = ' ';
+	printf("Please enter your password :\n");
+	scanf("%s", &data[len + 1]);
+	if (send(server->sock, data, strlen(data), 0) == ERROR)
+		return (ERROR);
+	if (recv(server->sock, &ret, sizeof(int), 0) == ERROR)
+		return (ERROR);
+	if (!ret)
+		printf("Login or password incorrect, exit.\n"); // -> close connection client side ?
+	else
+		printf("Login successful, continue.\n");
+	return (ret ? EXIT_SUCCESS : ERROR);
+}
+
+static void		launch_client(t_net *server)
+{
+	char		data[BUFF_SIZE];
+	t_cmd		cmd;
+	t_exec_cmd	execute[6];
+
+	cmd_ini(execute);
+	bzero(data, BUFF_SIZE);
+	while ((cmd = get_cmd()) != QUIT)
+	{
+		if (execute[cmd](server, data) == ERROR)
+			perror("server");
+		bzero(data, BUFF_SIZE);
+	}
+	if (execute[cmd](server, data) == ERROR) // -> close connection client side ?
+		perror("server");
 }
 
 int				main(int argc,char *argv[])
 {
 	t_net		server;
-	char		data[BUFF_SIZE];
-	t_cmd		cmd;
-	t_exec_cmd	execute[6];
+	
 
 	if (argc == 1)
 	{
@@ -53,18 +94,15 @@ int				main(int argc,char *argv[])
 		return (0);
 	}
 	if (client_ini(&server, atoi(argv[1])) == ERROR)
-		exit(errno);
-	if (login_promt(&server) == ERROR)
-		exit(errno);
-	cmd_ini(execute);
-	bzero(data, BUFF_SIZE);
-	while ((cmd = get_cmd()) != QUIT)
 	{
-		if (execute[cmd](&server, data) == ERROR)
-			perror("server");
-		bzero(data, BUFF_SIZE);
-	}
-	if (execute[cmd](&server, data) == ERROR)
 		perror("server");
+		exit(errno);
+	}
+	if (login_prompt(&server) == ERROR)
+	{
+		perror("server");
+		exit(errno);
+	}
+	launch_client(&server);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/24 11:22:30 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/24 12:48:38 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/26 12:20:29 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,16 @@ static t_user	*get_user(const char *login, const char *password)
 
 static void		send_status(t_net *client, t_log *log, const char *login, int ret)
 {
-	errno = EBADMSG;
-	log_error(log, login, LOG);
+	if (!ret)
+	{
+		errno = EBADMSG;
+		log_error(log, login, LOG);
+	}
 	if (send(client->sock, &ret, sizeof(int), 0) == ERROR)
 		log_error(log, "login status return", SEND);
 }
 
+// DO a list of connected users to refuse already connected client
 int				cmd_login(t_net *client, char data[BUFF_SIZE], t_log *log)
 {
 	const char	*parse_head = &data[6];
