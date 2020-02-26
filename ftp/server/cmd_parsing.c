@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 10:47:06 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/19 01:34:09 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/02/26 15:09:18 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@ t_cmd		parse_cmd(t_net *client, char data[BUFF_SIZE])
 {
 	size_t				index = 0;
 
-	while (recv(client->sock, data, BUFF_SIZE, 0) == 0)
-		sleep(1);
+	recv(client->sock, data, BUFF_SIZE, 0);
 	while (index < CMD_TAB_LEN)
 	{
 		if (!strncmp(data, cmd_str[index], cmd_len[index]))
