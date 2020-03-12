@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 22:47:38 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/24 12:38:37 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/03/12 21:56:42 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,13 @@ static void		launch_server(t_net *client)
 
 	printf("Client connection from %s:%i\n", client->ip, client->addr.sin_port);
 	cmd_ini(execute);
-	bzero(data, BUFF_SIZE);
-	bzero(&log, sizeof(t_log));
+	CLEAR(data, log);
 	while ((cmd = parse_cmd(client, data)) != QUIT)
 	{
 		printf("%s:%i - cmd : %s\n", client->ip, client->addr.sin_port, data);
 		if (execute[cmd](client, data, &log) == ERROR)
 			write_log(client, &log, "error.log");
-		bzero(data, BUFF_SIZE);
-		bzero(&log, sizeof(t_log));
+		CLEAR(data, log);
 	}
 	printf("%s:%i - cmd : %s\n", client->ip, client->addr.sin_port, data);
 	if (execute[cmd](client, data, &log) == ERROR)
@@ -83,11 +81,11 @@ int				main(int argc, char *argv[])
 		return (0);
 	}
 	if (server_ini(&server, atoi(argv[1])) == ERROR)
-		error_exit();
+		EXIT_ERROR("ftp server");
 	if (userbase_loading(&g_users, "userbase.db") == ERROR)
-		error_exit();
+		EXIT_ERROR("ftp server");
 	if (wait_for_client(&server, &client) == ERROR)
-		error_exit();
+		EXIT_ERROR("ftp server");
 	launch_server(&client);
 	close(server.sock);
 	bzero(&server, sizeof(t_net));

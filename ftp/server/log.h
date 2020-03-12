@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 14:42:42 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/24 12:48:17 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/03/12 21:45:59 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,5 @@ typedef struct	s_log
 void			log_error(t_log *log, const char *name, t_error i);
 /* Error logs writing function */
 void			write_log(t_net *client, t_log *log, const char *filename);
-/* Exit program with error output */
-void			error_exit(void);
+
 #endif

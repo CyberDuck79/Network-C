@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 22:46:52 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/26 15:19:59 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/03/12 21:53:47 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@
 /* Globals macros */
 # define ERROR			-1
 # define BUFF_SIZE		1024
+# define EXIT_ERROR(name) perror(name);exit(errno)
+# define CLEAR(data, log) bzero(data, BUFF_SIZE);bzero(&log, sizeof(t_log))
 
 /* Implemented commands enum */
 typedef enum			e_cmd

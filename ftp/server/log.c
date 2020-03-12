@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 14:32:57 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/24 12:47:32 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/03/12 21:45:54 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,3 @@ void		write_log(t_net *client, t_log *log, const char *filename)
 	close(log_fd);
 }
 
-/* Exit program with error output */
-void		error_exit(void)
-{
-	perror("FTP server");
-	exit(errno);
-}

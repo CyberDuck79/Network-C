@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/24 09:59:26 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/02/24 12:38:50 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/03/12 22:05:30 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,15 +66,18 @@ int				userbase_loading(t_user **users, const char *filename)
 {
 	int		fd;
 	char	*database;
-	int		error;
 
 	if ((fd = open(filename, O_RDONLY)) == ERROR)
 		return (ERROR);
 	if ((database = read_database(fd, 0)) == NULL)
 		return (ERROR);
-	error = get_users(database, users);
-	if (error)
+	if (get_users(database, users) == ERROR)
+	{
 		errno = EINVAL;
+		free(database);
+		free_user_lst(users);
+		return (ERROR);
+	}
 	free(database);
-	return(error);
+	return (EXIT_SUCCESS);
 }
